@@ -50,11 +50,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
-func abs(n int) int64 {
-	if n < 0 {
-		return int64(-1 * n)
-	}
-
-	return int64(n)
-}
