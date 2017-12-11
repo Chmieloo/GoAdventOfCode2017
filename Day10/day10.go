@@ -23,10 +23,7 @@ func main() {
 	var solution1 int
 
 	// Construct a list of ints [0:255]
-	list := make([]int, 256)
-	for i := 0; i < 256; i++ {
-		list[i] = i
-	}
+	list := initList()
 
 	// Read input file contents
 	scanner := bufio.NewScanner(file)
@@ -46,8 +43,29 @@ func main() {
 
 	var currentPosition int
 	var skipSize int
-	var listLength = len(list)
 
+	list, currentPosition, skipSize = modifyList(list, intLengths, currentPosition, skipSize)
+
+	solution1 = list[0] * list[1]
+	fmt.Println(solution1)
+
+	list = initList()
+	intLengths = append(intLengths, 17, 31, 73, 47, 23)
+	currentPosition = 0
+	skipSize = 0
+	for x := 0; x < 64; x++ {
+		list, currentPosition, skipSize = modifyList(list, intLengths, currentPosition, skipSize)
+	}
+
+	fmt.Println(currentPosition)
+	fmt.Println(skipSize)
+
+	elapsed := time.Since(start)
+	log.Printf("Run time: %s", elapsed)
+}
+
+func modifyList(list []int, intLengths []int, currentPosition int, skipSize int) ([]int, int, int) {
+	listLength := len(list)
 	for _, elem := range intLengths {
 		var chunk []int
 		for i := currentPosition; i < (currentPosition + elem); i++ {
@@ -70,9 +88,13 @@ func main() {
 		skipSize++
 	}
 
-	solution1 = list[0] * list[1]
+	return list, currentPosition, skipSize
+}
 
-	fmt.Println(solution1)
-	elapsed := time.Since(start)
-	log.Printf("Run time: %s", elapsed)
+func initList() []int {
+	list := make([]int, 256)
+	for i := 0; i < 256; i++ {
+		list[i] = i
+	}
+	return list
 }
